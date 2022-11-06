@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h4>Filters</h4>
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+<form method='POST'>
+  {{  form.hidden_tag() }}
+<div class="row g-3 align-items-center">
+
+  <div class="col-auto">
+  {{ form.start_date(class="form-control") }}
+  </div>
+  <div class="col-auto">
+  {{ form.end_date(class="form-control") }}
+  </div>
+  <div class="col-auto">
+  {{ form.base(class='selectpicker', placeholder='Base') }}
+  </div>
+  <div class="col-auto">
+  {{ form.currency(class="form-control", placeholder='Currency') }}
+  </div>
+  <div class="col-auto">
+  {{ form.submit(class="btn btn-secondary") }}
+</div>
+</div>
+</form>
+</div>
+<br/>
+  <div class='row'>
+    <div class='col-12'>
+  <div id='rates_line' style='height: 40vh'></div>
+    <script>
+      var graphs = {{ graph|safe }};
+      Plotly.plot('rates_line', graphs, {});
+    </script>
+  </div>
+
+
+{% endblock %}
