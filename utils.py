@@ -81,10 +81,10 @@ def generate_list_of_dates(first_date, last_date):
     This function generates a list of subsequent days between two dates.
     Before runing this function you need to make these imports:
     - from datetime import date, timedelta
-        
+
     OUTPUT
     dates:list - a list of of dates
-    
+
     """
     dates = list()
     start_date = first_date
@@ -93,24 +93,24 @@ def generate_list_of_dates(first_date, last_date):
     while start_date <= end_date:
         dates.append(start_date)
         start_date += delta
-        
+
     return dates
 
 
 def get_rates(dates, SECRET_KEY):
     """
-    This function queries exchange rates from openexchangerates.com using API 
+    This function queries exchange rates from openexchangerates.com using API
     and returns a list of rates for the specified period
     Before running this function you will need to make these imports:
     - import requests
-    
+
     INPUT:
     dates:list - a list of dates in datetime format
     SECRET_KEY:str - secret key from you API
-    
+
     OUTPUT:
     rates:list - a list of dates with a json with rates with base USD
-    
+
     """
     rates = list()
     for d in dates:
@@ -125,11 +125,11 @@ def create_fx_table_upload(dates, rates):
     This function converts a list of JSON files and a list of dates into a dataframe
     Before running this function you will need to make these imports:
     - import pandas as pd
-    
+
     INPUT:
     dates:list - a list of of dates
     rates:list - a list of dates with a json with rates with base USD
-    
+
     OUTPUT:
     fx:DataFrame - a dataframe with date, ccy, rate USD, rate EUR columns
     """
@@ -152,7 +152,7 @@ def create_fx_table_upload(dates, rates):
     fx.columns = ['date', 'ccy', 'USD', 'rate_y', 'EUR']
     fx.drop('rate_y',axis=1, inplace=True)
     fx['date'] = pd.to_datetime(fx['date'])
-    
+
     return fx
 
 def import_to_db():
@@ -167,7 +167,4 @@ def import_to_db():
         db = create_engine(conn_string)
         conn = db.connect()
         fx.to_sql('forex_rates', con=conn, if_exists='append', index=False)
-        conn = psycopg2.connect(conn_string)
-        conn.commit()
         conn.close()
-
